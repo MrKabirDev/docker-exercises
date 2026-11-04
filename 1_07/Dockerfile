@@ -6,4 +6,6 @@ RUN apt install -y curl
 
 COPY ./script.sh .
 
-CMD ["./script.sh"]
+ENTRYPOINT ["./script.sh"]
+
+CMD ["google.com"]
