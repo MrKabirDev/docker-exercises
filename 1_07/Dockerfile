@@ -7,4 +7,3 @@ RUN apt install -y curl
 COPY ./script.sh .
 
 CMD ["./script.sh"]
-
