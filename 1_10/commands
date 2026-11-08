@@ -1,0 +1,2 @@
+docker build -t improved-web-server .
+docker run -d -p localhost:8080:3000/tcp
