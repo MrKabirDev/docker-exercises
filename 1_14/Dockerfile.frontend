@@ -1,1 +1,47 @@
-# use here COPY 1_12 .
+FROM ubuntu:22.04
+
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+
+RUN apt-get update && apt-get install -y \
+    curl \
+    ca-certificates \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV NVM_DIR=/root/.nvm
+ENV NODE_VERSION=16.20.2
+
+#the script does not work in just ubuntu image, so I have used nvm to install node 16.
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+
+
+RUN bash -c "source $NVM_DIR/nvm.sh && \
+    nvm install $NODE_VERSION && \
+    nvm alias default $NODE_VERSION && \
+    nvm use default"
+
+
+ENV PATH="$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH"
+
+
+RUN node -v && npm -v
+
+WORKDIR /usr/src/app/
+
+EXPOSE 5001
+
+ENV REACT_APP_BACKEND_URL=http://localhost:8080
+
+COPY 1_12 .    
+
+
+
+RUN npm install
+
+RUN npm install -g serve
+
+RUN npm run build
+
+CMD ["serve","-s","-l","5001","build"]
